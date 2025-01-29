@@ -56,7 +56,7 @@ Or manually add the contents of `github-actions-key.pub` to the `/home/user/.ssh
 ### **🟢 Dev Deployment (`.github/workflows/dev.yml`)**  
 
 ```yaml
-name: Deploy to Dev
+name: Deploy to Dev ##testing again
 
 on:
   push:
@@ -71,16 +71,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H server-ip >> ~/.ssh/known_hosts
-
-      - name: SSH into Dev Server and Run Script
-        run: |
-          ssh user@server-ip "bash /path/to/your-script.sh"
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: 13.232.84.23
+          username: ec2-user
+          key: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            sudo bash -c "/home/ec2-user/.dev-deploy-script.sh"
 ```
 
 ---
@@ -103,16 +102,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H server-ip >> ~/.ssh/known_hosts
-
-      - name: SSH into Staging Server and Run Script
-        run: |
-          ssh user@server-ip "bash /path/to/your-script.sh"
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: 13.232.84.23
+          username: ec2-user
+          key: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            sudo bash -c "/home/ec2-user/.dev-deploy-script.sh"
 ```
 
 ---
@@ -135,16 +133,15 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Setup SSH Key
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H server-ip >> ~/.ssh/known_hosts
-
-      - name: SSH into Production Server and Run Script
-        run: |
-          ssh user@server-ip "bash /path/to/your-script.sh"
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: 13.232.84.23
+          username: ec2-user
+          key: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            sudo bash -c "/home/ec2-user/.dev-deploy-script.sh"
 ```
 
 ---
